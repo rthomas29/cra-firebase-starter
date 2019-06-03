@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function fetchFromLocalStorage(key) {
+  return JSON.parse(localStorage.getItem([key]))
 }
 
-export default App;
+function useAuthRouting(history) {
+  useEffect(() => {
+    const user = fetchFromLocalStorage('user')
+    if (user !== null) {
+      history.push('/welcome', { user: user.email })
+    } else {
+      history.push('/auth')
+    }
+  }, [history])
+}
+
+function App({ history }) {
+  useAuthRouting(history)
+  return null
+}
+
+export default App
